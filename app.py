@@ -578,6 +578,6 @@ def usuario_eliminar(uid):
 if __name__ == '__main__':
     init_db()
     print("\n  Biblioteca escolar iniciada")
-    print("  Abre tu navegador en: http://localhost:5000")
+    print("  Abre tu navegador en: biblioteca-cejaeg-production-c612.up.railway.app")
     print("  Usuario: admin  |  Contraseña: admin123\n")
     app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))

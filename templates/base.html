@@ -2,668 +2,252 @@
 <html lang="es" data-theme="light">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Biblioteca CEJAEG</title>
 <style>
-:root {
-  --bg: #f4f6fb;
-  --surface: #fff;
-  --border: #e4e8f0;
-  --border2: #d0d6e4;
-  --text: #1a1e2e;
-  --text2: #5a6278;
-  --text3: #9aa0b4;
-  --blue: #1d6fce;
-  --blue-hover: #1a62b8;
-  --blue-light: #e8f0fb;
-  --blue-mid: #c3d8f7;
-  --green-bg: #f0fdf4;
-  --green: #16a34a;
-  --green-bd: #bbf7d0;
-  --red-bg: #fef2f2;
-  --red: #dc2626;
-  --red-bd: #fecaca;
-  --amber-bg: #fffbeb;
-  --amber: #d97706;
-  --amber-bd: #fde68a;
-  --row-hover: #f8fafd;
-  --sidebar-active: #e8f0fb;
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+:root{
+  --bg:#f4f6fb;--surface:#fff;--border:#e4e8f0;--border2:#d0d6e4;
+  --text:#1a1e2e;--text2:#5a6278;--text3:#9aa0b4;
+  --blue:#1d6fce;--blue-hover:#1a62b8;--blue-light:#e8f0fb;--blue-mid:#c3d8f7;
+  --green-bg:#f0fdf4;--green:#16a34a;--green-bd:#bbf7d0;
+  --red-bg:#fef2f2;--red:#dc2626;--red-bd:#fecaca;
+  --amber-bg:#fffbeb;--amber:#d97706;--amber-bd:#fde68a;
+  --row-hover:#f8fafd;--sidebar-active:#e8f0fb;
 }
-
-[data-theme="dark"] {
-  --bg: #0f1117;
-  --surface: #1a1d27;
-  --border: #2a2e3d;
-  --border2: #363a50;
-  --text: #e8eaf2;
-  --text2: #9aa0b8;
-  --text3: #5a6080;
-  --blue: #4a90e2;
-  --blue-hover: #5a9de8;
-  --blue-light: #1a2540;
-  --blue-mid: #1e3060;
-  --green-bg: #0d2018;
-  --green: #4ade80;
-  --green-bd: #166534;
-  --red-bg: #200f0f;
-  --red: #f87171;
-  --red-bd: #7f1d1d;
-  --amber-bg: #1f1500;
-  --amber: #fbbf24;
-  --amber-bd: #78350f;
-  --row-hover: #1f2235;
-  --sidebar-active: #1a2540;
+[data-theme="dark"]{
+  --bg:#0f1117;--surface:#1a1d27;--border:#2a2e3d;--border2:#363a50;
+  --text:#e8eaf2;--text2:#9aa0b8;--text3:#5a6080;
+  --blue:#4a90e2;--blue-hover:#5a9de8;--blue-light:#1a2540;--blue-mid:#1e3060;
+  --green-bg:#0d2018;--green:#4ade80;--green-bd:#166534;
+  --red-bg:#200f0f;--red:#f87171;--red-bd:#7f1d1d;
+  --amber-bg:#1f1500;--amber:#fbbf24;--amber-bd:#78350f;
+  --row-hover:#1f2235;--sidebar-active:#1a2540;
 }
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  font-size: 14px;
-  line-height: 1.5;
-  transition: background 0.2s, color 0.2s;
-}
-
-a { color: inherit; text-decoration: none; }
-button { font-family: inherit; }
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--text);font-size:14px;transition:background .2s,color .2s}
+a{color:inherit;text-decoration:none}
+.app{display:flex;min-height:100vh}
 
 /* ── SIDEBAR ── */
-.sidebar {
-  width: 240px;
-  background: var(--surface);
-  border-right: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 100;
-  transition: transform 0.25s ease;
-  box-shadow: var(--shadow);
-}
+.sidebar{width:210px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;bottom:0;left:0;z-index:100;transition:transform .25s,background .2s}
+.logo{padding:1.1rem 1rem .9rem;border-bottom:1px solid var(--border)}
+.logo-top{display:flex;align-items:center;gap:10px}
+.logo-icon{width:34px;height:34px;flex-shrink:0}
+.logo-text h1{font-size:13px;font-weight:700;color:var(--text);line-height:1.2}
+.logo-text p{font-size:10px;color:var(--text3);margin-top:1px}
+.cejaeg-badge{margin-top:8px;display:inline-flex;align-items:center;gap:5px;background:var(--blue-light);border:1px solid var(--blue-mid);border-radius:6px;padding:3px 8px}
+.cejaeg-badge span{font-size:10px;font-weight:700;color:var(--blue);letter-spacing:.04em}
+nav{flex:1;padding:.4rem 0;overflow-y:auto}
+.nav-link{display:flex;align-items:center;gap:9px;padding:8px 1rem;color:var(--text2);font-size:13px;transition:.1s}
+.nav-link:hover{background:var(--row-hover);color:var(--text)}
+.nav-link.active{background:var(--sidebar-active);color:var(--blue);font-weight:500}
+.nav-link svg{flex-shrink:0;opacity:.6}
+.nav-link.active svg{opacity:1}
+.sidebar-footer{padding:.75rem 1rem;border-top:1px solid var(--border);font-size:12px;color:var(--text3);display:flex;flex-direction:column;gap:4px}
+.sidebar-footer span{font-weight:500;color:var(--text2)}
+.sidebar-footer small{font-size:10px;color:var(--text3)}
+.sidebar-footer a{color:var(--text3);font-size:11px}
+.sidebar-footer a:hover{color:var(--red)}
 
-.logo {
-  padding: 1.5rem 1rem 1rem;
-  border-bottom: 1px solid var(--border);
-}
-
-.logo-top {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.logo-icon {
-  width: 36px;
-  height: 36px;
-  flex-shrink: 0;
-}
-
-.logo-text h1 {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--text);
-  line-height: 1.2;
-  margin: 0;
-}
-
-.logo-text p {
-  font-size: 11px;
-  color: var(--text3);
-  margin-top: 2px;
-}
-
-.cejaeg-badge {
-  margin-top: 12px;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: var(--blue-light);
-  border: 1px solid var(--blue-mid);
-  border-radius: 6px;
-  padding: 4px 10px;
-}
-
-.cejaeg-badge span {
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--blue);
-  letter-spacing: 0.03em;
-}
-
-nav {
-  flex: 1;
-  padding: 0.5rem 0;
-  overflow-y: auto;
-}
-
-.nav-link {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px 1.25rem;
-  color: var(--text2);
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.15s ease;
-  border-left: 3px solid transparent;
-}
-
-.nav-link:hover {
-  background: var(--row-hover);
-  color: var(--text);
-}
-
-.nav-link.active {
-  background: var(--sidebar-active);
-  color: var(--blue);
-  border-left-color: var(--blue);
-}
-
-.nav-link svg {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-  opacity: 0.6;
-}
-
-.nav-link.active svg {
-  opacity: 1;
-}
-
-.sidebar-footer {
-  padding: 1.25rem;
-  border-top: 1px solid var(--border);
-  font-size: 13px;
-  color: var(--text3);
-}
-
-.sidebar-footer span {
-  font-weight: 600;
-  color: var(--text);
-  display: block;
-  margin-bottom: 2px;
-}
-
-.sidebar-footer small {
-  font-size: 11px;
-  opacity: 0.8;
-}
-
-.sidebar-footer a {
-  color: var(--text3);
-  font-size: 12px;
-  margin-top: 8px;
-  display: inline-block;
-}
-
-.sidebar-footer a:hover {
-  color: var(--red);
-}
-
-/* ── TOPBAR ── */
-.topbar {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 64px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  z-index: 101;
-  align-items: center;
-  padding: 0 1.25rem;
-  gap: 12px;
-  box-shadow: var(--shadow);
-}
-
-.topbar-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: 1;
-}
-
-.topbar-logo h1 {
-  font-size: 16px;
-  font-weight: 700;
-  color: var(--text);
-  margin: 0;
-}
-
-.menu-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  color: var(--text);
-  padding: 8px;
-  display: flex;
-  align-items: center;
-  border-radius: 8px;
-  transition: background 0.15s;
-}
-
-.menu-btn:hover {
-  background: var(--row-hover);
-}
-
-.overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.5);
-  z-index: 99;
-  backdrop-filter: blur(2px);
-}
+/* ── TOPBAR MÓVIL ── */
+.topbar{display:none;position:fixed;top:0;left:0;right:0;height:52px;background:var(--surface);border-bottom:1px solid var(--border);z-index:99;align-items:center;padding:0 1rem;gap:10px}
+.topbar-logo{display:flex;align-items:center;gap:8px;flex:1}
+.topbar-logo h1{font-size:14px;font-weight:700;color:var(--text)}
+.menu-btn{background:none;border:none;cursor:pointer;color:var(--text);padding:4px;display:flex;align-items:center}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:99}
 
 /* ── MAIN ── */
-.main {
-  margin-left: 240px;
-  flex: 1;
-  padding: 2rem;
-  max-width: 1200px;
-  margin: 2rem auto;
-  min-height: 100vh;
-}
-
-.page-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.page-header h2 {
-  font-size: 24px;
-  font-weight: 700;
-  margin: 0;
-}
-
-.page-header p {
-  font-size: 14px;
-  color: var(--text2);
-}
+.main{margin-left:210px;flex:1;padding:1.5rem 2rem;max-width:1100px}
+.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:8px}
+.page-header h2{font-size:20px;font-weight:600}
+.page-header p{font-size:13px;color:var(--text2);margin-top:2px}
 
 /* ── THEME TOGGLE ── */
-.theme-toggle {
-  position: fixed;
-  top: 1.25rem;
-  right: 1.25rem;
-  z-index: 200;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 50px;
-  padding: 8px 14px;
-  cursor: pointer;
-  font-size: 13px;
-  color: var(--text2);
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.2s ease;
-  box-shadow: var(--shadow-sm);
-}
+.theme-toggle{position:fixed;top:1rem;right:1rem;z-index:200;background:var(--surface);border:1px solid var(--border);border-radius:99px;padding:5px 10px;cursor:pointer;font-size:12px;color:var(--text2);display:flex;align-items:center;gap:5px;transition:.2s}
+.theme-toggle:hover{border-color:var(--blue);color:var(--blue)}
 
-.theme-toggle:hover {
-  border-color: var(--blue);
-  color: var(--blue);
-  box-shadow: var(--shadow);
-}
-
-/* ── BOTONES ── */
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 18px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--text);
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.15s ease;
-  text-decoration: none;
-  box-shadow: var(--shadow-sm);
-}
-
-.btn:hover {
-  background: var(--bg);
-  border-color: var(--border2);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow);
-}
-
-.btn-primary {
-  background: var(--blue);
-  color: #fff;
-  border-color: var(--blue);
-}
-
-.btn-primary:hover {
-  background: var(--blue-hover);
-  border-color: var(--blue-hover);
-}
-
-.btn-danger {
-  background: var(--red-bg);
-  color: var(--red);
-  border-color: var(--red-bd);
-}
-
-.btn-green {
-  background: var(--green-bg);
-  color: var(--green);
-  border-color: var(--green-bd);
-}
-
-.btn-sm {
-  padding: 6px 14px;
-  font-size: 12px;
-}
-
-/* ── CARDS Y TABLAS ── */
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-.metric {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1.5rem 1rem;
-  text-align: center;
-  transition: all 0.2s ease;
-  box-shadow: var(--shadow-sm);
-}
-
-.metric:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow);
-}
-
-.metric-val {
-  font-size: 32px;
-  font-weight: 700;
-  line-height: 1.1;
-  margin-bottom: 4px;
-}
-
-.metric-lbl {
-  font-size: 12px;
-  color: var(--text3);
-  font-weight: 500;
-}
-
-.card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-  margin-bottom: 1.5rem;
-  box-shadow: var(--shadow-sm);
-  transition: all 0.2s ease;
-}
-
-.card:hover {
-  box-shadow: var(--shadow);
-}
-
-.card-header {
-  padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid var(--border);
-  font-weight: 600;
-  font-size: 14px;
-  color: var(--text);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 14px;
-}
-
-th {
-  text-align: left;
-  padding: 12px 16px;
-  font-weight: 600;
-  color: var(--text2);
-  border-bottom: 2px solid var(--border);
-  white-space: nowrap;
-  font-size: 13px;
-}
-
-td {
-  padding: 14px 16px;
-  border-bottom: 1px solid var(--border);
-  vertical-align: middle;
-}
-
-tr:hover td {
-  background: var(--row-hover);
-}
-
-/* ── BADGES Y FLASH ── */
-.badge {
-  display: inline-block;
-  padding: 4px 10px;
-  border-radius: 50px;
-  font-size: 11px;
-  font-weight: 600;
-}
-
-.badge-green { background: var(--green-bg); color: var(--green); }
-.badge-red { background: var(--red-bg); color: var(--red); }
-.badge-amber { background: var(--amber-bg); color: var(--amber); }
-.badge-blue { background: var(--blue-light); color: var(--blue); }
-
-.flash {
-  padding: 1rem 1.25rem;
-  border-radius: 10px;
-  margin-bottom: 1.5rem;
-  font-size: 14px;
-  font-weight: 500;
-  border: 1px solid;
-  box-shadow: var(--shadow-sm);
-}
-
-.flash.error {
-  background: var(--red-bg);
-  color: var(--red);
-  border-color: var(--red-bd);
-}
-
-/* ── FORMULARIOS ── */
-.search-bar {
-  display: flex;
-  gap: 12px;
-  margin-bottom: 1.5rem;
-  flex-wrap: wrap;
-}
-
-.search-bar input,
-.search-bar select {
-  padding: 10px 14px;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  font-size: 14px;
-  background: var(--surface);
-  color: var(--text);
-  transition: all 0.15s ease;
-  min-height: 44px;
-}
-
-.search-bar input {
-  flex: 1;
-  min-width: 200px;
-}
-
-.search-bar input:focus,
-.search-bar select:focus {
-  outline: none;
-  border-color: var(--blue);
-  box-shadow: 0 0 0 3px rgba(29,111,206,0.1);
-}
-
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-group label {
-  display: block;
-  font-size: 13px;
-  font-weight: 600;
-  color: var(--text2);
-  margin-bottom: 8px;
-}
-
-.form-row {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-}
-
-.form-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 2rem;
-  max-width: 700px;
-  margin: 0 auto;
-  box-shadow: var(--shadow);
-}
-
-.form-actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border);
-  justify-content: flex-end;
-}
+/* ── COMPONENTES ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:13px;cursor:pointer;font-family:inherit;transition:.1s;text-decoration:none}
+.btn:hover{background:var(--bg);border-color:var(--border2)}
+.btn-primary{background:var(--blue);color:#fff;border-color:var(--blue)}
+.btn-primary:hover{background:var(--blue-hover);border-color:var(--blue-hover)}
+.btn-danger{background:var(--red-bg);color:var(--red);border-color:var(--red-bd)}
+.btn-danger:hover{opacity:.85}
+.btn-sm{padding:4px 10px;font-size:12px}
+.btn-green{background:var(--green-bg);color:var(--green);border-color:var(--green-bd)}
+.btn-green:hover{opacity:.85}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-bottom:1.5rem}
+.metric{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem;text-align:center;transition:.2s}
+.metric-val{font-size:28px;font-weight:700;line-height:1.1;color:var(--text)}
+.metric-lbl{font-size:11px;color:var(--text3);margin-top:4px}
+.metric.red .metric-val{color:var(--red)}
+.metric.green .metric-val{color:var(--green)}
+.metric.amber .metric-val{color:var(--amber)}
+.metric.indigo .metric-val{color:var(--blue)}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;margin-bottom:1rem;transition:.2s}
+.card-header{padding:.75rem 1rem;border-bottom:1px solid var(--border);font-weight:500;font-size:13px;color:var(--text2);display:flex;align-items:center;justify-content:space-between}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:9px 12px;font-size:12px;font-weight:500;color:var(--text3);border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--row-hover)}
+.badge{display:inline-block;padding:2px 8px;border-radius:99px;font-size:11px;font-weight:500}
+.badge-green{background:var(--green-bg);color:var(--green)}
+.badge-red{background:var(--red-bg);color:var(--red)}
+.badge-amber{background:var(--amber-bg);color:var(--amber)}
+.badge-blue{background:var(--blue-light);color:var(--blue)}
+.badge-gray{background:var(--bg);color:var(--text2)}
+.badge-indigo{background:var(--blue-light);color:var(--blue)}
+.flash{padding:.75rem 1rem;border-radius:8px;margin-bottom:1rem;font-size:13px;background:var(--green-bg);color:var(--green);border:1px solid var(--green-bd)}
+.flash.error{background:var(--red-bg);color:var(--red);border-color:var(--red-bd)}
+.search-bar{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
+.search-bar input,.search-bar select{padding:7px 10px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;background:var(--surface);color:var(--text)}
+.search-bar input{flex:1;min-width:160px}
+form input,form select,form textarea{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:8px;font-size:13px;font-family:inherit;background:var(--surface);color:var(--text);outline:none}
+form input:focus,form select:focus,form textarea:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(29,111,206,.12)}
+.form-group{margin-bottom:1rem}
+.form-group label{display:block;font-size:12px;font-weight:500;color:var(--text2);margin-bottom:5px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.5rem;max-width:620px}
+.form-actions{display:flex;gap:8px;margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border)}
+.empty{text-align:center;padding:3rem;color:var(--text3);font-size:13px}
+.alert{padding:.75rem 1rem;border-radius:8px;font-size:13px;margin-bottom:1rem}
+.alert-red{background:var(--red-bg);color:var(--red);border:1px solid var(--red-bd)}
+.alert-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-bd)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 
 /* ── RESPONSIVE ── */
-@media (max-width: 1024px) {
-  .main {
-    margin-left: 240px;
-    padding: 1.5rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .topbar { display: flex; }
-  .sidebar { transform: translateX(-100%); }
-  .sidebar.open { transform: translateX(0); }
-  .overlay.open { display: block; }
-  
-  .main {
-    margin-left: 0;
-    padding: 1rem;
-    padding-top: 80px;
-    max-width: 100%;
-  }
-  
-  .page-header h2 {
-    font-size: 20px;
-  }
-  
-  .cards {
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 1rem;
-  }
-  
-  .metric-val { font-size: 26px; }
-  
-  .form-row,
-  .two-col {
-    grid-template-columns: 1fr;
-  }
-  
-  .form-card {
-    padding: 1.5rem;
-    margin: 0;
-  }
-  
-  table {
-    font-size: 13px;
-    overflow-x: auto;
-    display: block;
-    white-space: nowrap;
-  }
-  
-  th, td {
-    padding: 10px 12px;
-  }
-  
-  .search-bar input {
-    min-width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .topbar {
-    padding: 0 1rem;
-    height: 60px;
-  }
-  
-  .topbar-logo h1 {
-    font-size: 15px;
-  }
-  
-  .main {
-    padding: 0.75rem;
-    padding-top: 75px;
-  }
-  
-  .cards {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
-  
-  .metric {
-    padding: 1.25rem 0.75rem;
-  }
-  
-  .metric-val { font-size: 22px; }
-  
-  .form-card {
-    padding: 1.25rem;
-  }
-  
-  .btn {
-    padding: 10px 16px;
-    font-size: 14px;
-    width: 100%;
-    justify-content: center;
-  }
-  
-  .form-actions {
-    flex-direction: column;
-  }
+@media(max-width:768px){
+  .topbar{display:flex}
+  .sidebar{transform:translateX(-100%)}
+  .sidebar.open{transform:translateX(0)}
+  .overlay.open{display:block}
+  .main{margin-left:0;padding:1rem;padding-top:68px}
+  .theme-toggle{top:10px;right:10px}
+  .two-col{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
+  .form-card{max-width:100%}
+  table{font-size:12px}
+  th,td{padding:7px 8px}
+  .cards{grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px}
+  .metric-val{font-size:22px}
 }
 </style>
 </head>
 <body>
-<!-- Resto del HTML igual, solo cambian los estilos -->
-<!-- [Tu HTML original aquí sin cambios] -->
+
+<!-- Topbar solo en móvil -->
+<div class="topbar">
+  <button class="menu-btn" onclick="toggleMenu()">
+    <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
+  <div class="topbar-logo">
+    <svg width="28" height="28" viewBox="0 0 34 34" fill="none"><rect width="34" height="34" rx="8" fill="#1d6fce"/><path d="M8 25.5C8 24.12 9.12 23 10.5 23H26" stroke="white" stroke-width="1.8" stroke-linecap="round"/><path d="M10.5 7H26v18H10.5A2.5 2.5 0 018 22.5v-13A2.5 2.5 0 0110.5 7z" stroke="white" stroke-width="1.8"/><line x1="12" y1="13" x2="22" y2="13" stroke="white" stroke-width="1.5" stroke-linecap="round"/><line x1="12" y1="17" x2="19" y2="17" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+    <h1>Biblioteca CEJAEG</h1>
+  </div>
+</div>
+
+<!-- Overlay para cerrar menú -->
+<div class="overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<button class="theme-toggle" onclick="toggleTheme()">
+  <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" id="icon-moon"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+  <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" id="icon-sun" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+  <span id="theme-label">Modo oscuro</span>
+</button>
+
+<div class="app">
+  <div class="sidebar" id="sidebar">
+    <div class="logo">
+      <div class="logo-top">
+        <svg class="logo-icon" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="34" height="34" rx="8" fill="#1d6fce"/>
+          <path d="M8 25.5C8 24.12 9.12 23 10.5 23H26" stroke="white" stroke-width="1.8" stroke-linecap="round"/>
+          <path d="M10.5 7H26v18H10.5A2.5 2.5 0 018 22.5v-13A2.5 2.5 0 0110.5 7z" stroke="white" stroke-width="1.8"/>
+          <line x1="12" y1="13" x2="22" y2="13" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="12" y1="17" x2="19" y2="17" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <div class="logo-text">
+          <h1>Biblioteca</h1>
+          <p>Sistema de inventario</p>
+        </div>
+      </div>
+      <div class="cejaeg-badge">
+        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--blue)"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>
+        <span>CEJAEG</span>
+      </div>
+    </div>
+
+    <nav>
+      <a href="{{ url_for('inicio') }}" class="nav-link {% if request.endpoint=='inicio' %}active{% endif %}" onclick="closeMobile()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Inicio
+      </a>
+      <a href="{{ url_for('libros') }}" class="nav-link {% if 'libro' in request.endpoint %}active{% endif %}" onclick="closeMobile()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+        Libros
+      </a>
+      <a href="{{ url_for('prestamos') }}" class="nav-link {% if 'prestamo' in request.endpoint %}active{% endif %}" onclick="closeMobile()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M16 3h5v5M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+        Préstamos
+      </a>
+      <a href="{{ url_for('donaciones') }}" class="nav-link {% if 'donacion' in request.endpoint %}active{% endif %}" onclick="closeMobile()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+        Donaciones
+      </a>
+      {% if session.user.rol == 'admin' %}
+      <a href="{{ url_for('reportes') }}" class="nav-link {% if request.endpoint=='reportes' %}active{% endif %}" onclick="closeMobile()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        Reportes
+      </a>
+      <a href="{{ url_for('usuarios') }}" class="nav-link {% if 'usuario' in request.endpoint %}active{% endif %}" onclick="closeMobile()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        Usuarios
+      </a>
+      {% endif %}
+    </nav>
+
+    <div class="sidebar-footer">
+      <span>{{ session.user.nombre }}</span>
+      <small>{{ 'Administrador' if session.user.rol == 'admin' else 'Encargado' }}</small>
+      <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+    </div>
+  </div>
+
+  <div class="main">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for msg in messages %}
+          <div class="flash">{{ msg }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </div>
+</div>
+
+<script>
+const html = document.documentElement;
+const saved = localStorage.getItem('tema') || 'light';
+setTheme(saved);
+function setTheme(t){
+  html.setAttribute('data-theme', t);
+  localStorage.setItem('tema', t);
+  document.getElementById('theme-label').textContent = t==='dark' ? 'Modo claro' : 'Modo oscuro';
+  document.getElementById('icon-moon').style.display = t==='dark' ? 'none' : '';
+  document.getElementById('icon-sun').style.display  = t==='dark' ? '' : 'none';
+}
+function toggleTheme(){
+  setTheme(html.getAttribute('data-theme')==='dark' ? 'light' : 'dark');
+}
+function toggleMenu(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+}
+function closeMobile(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+</script>
 </body>
 </html>
