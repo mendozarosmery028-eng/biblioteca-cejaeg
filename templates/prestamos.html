@@ -2,7 +2,7 @@
 {% block content %}
 <div class="page-header">
   <div><h2>Préstamos</h2><p>Gestión de préstamos activos, devueltos y vencidos</p></div>
-  <a href="biblioteca-cejaeg-production-c612.up.railway.app class="btn btn-primary">+ Nuevo préstamo</a>
+  <a href="{{ url_for('prestamo_nuevo') }}" class="btn btn-primary">+ Nuevo préstamo</a>
 </div>
 
 <div class="search-bar">
@@ -15,7 +15,7 @@
       <option value="devuelto" {% if estado=='devuelto' %}selected{% endif %}>Devueltos</option>
     </select>
     <button type="submit" class="btn">Buscar</button>
-    {% if q or estado %}<a href="biblioteca-cejaeg-production-c612.up.railway.app" class="btn">✕ Limpiar</a>{% endif %}
+    {% if q or estado %}<a href="{{ url_for('prestamos') }}" class="btn">✕ Limpiar</a>{% endif %}
   </form>
 </div>
 
