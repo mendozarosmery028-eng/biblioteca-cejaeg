@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h2>Panel principal</h2>
+    <p>{{ hoy }}</p>
+  </div>
+</div>
+
+<div class="cards">
+  <div class="metric">
+    <div class="metric-val">{{ stats.titulos }}</div>
+    <div class="metric-lbl">Títulos</div>
+  </div>
+  <div class="metric">
+    <div class="metric-val">{{ stats.ejemplares }}</div>
+    <div class="metric-lbl">Ejemplares totales</div>
+  </div>
+  <div class="metric indigo">
+    <div class="metric-val">{{ stats.prestados }}</div>
+    <div class="metric-lbl">Prestados ahora</div>
+  </div>
+  <div class="metric green">
+    <div class="metric-val">{{ stats.disponibles }}</div>
+    <div class="metric-lbl">Disponibles</div>
+  </div>
+  <div class="metric amber">
+    <div class="metric-val">{{ stats.devolver_hoy }}</div>
+    <div class="metric-lbl">Devuelven hoy</div>
+  </div>
+  <div class="metric red">
+    <div class="metric-val">{{ stats.vencidos }}</div>
+    <div class="metric-lbl">Vencidos</div>
+  </div>
+</div>
+
+{% if vencen_hoy %}
+<div class="alert alert-amber" style="margin-bottom:1rem">
+  ⚠️ <strong>{{ vencen_hoy|length }} préstamo(s) vencen hoy</strong> — deben devolver el libro antes de que termine el día.
+</div>
+{% endif %}
+
+<div class="two-col">
+  <div>
+    {% if vencidos %}
+    <div class="card">
+      <div class="card-header">
+        <span>⛔ Préstamos vencidos ({{ vencidos|length }})</span>
+        <a href="{{ url_for('prestamos', estado='vencido') }}" class="btn btn-sm">Ver todos</a>
+      </div>
+      <table>
+        <thead><tr><th>Alumno</th><th>Libro</th><th>Días</th><th></th></tr></thead>
+        <tbody>
+        {% for p in vencidos[:6] %}
+        <tr>
+          <td><strong>{{ p.alumno }}</strong><br><span style="font-size:11px;color:#888">{{ p.grado }}</span></td>
+          <td>{{ p.titulo }}<br><span style="font-size:11px;color:#888">Ej. #{{ p.numero }}</span></td>
+          <td><span class="badge badge-red">{{ p.dias_vencido|int }} días</span></td>
+          <td>
+            <form method="post" action="{{ url_for('devolver', pid=p.id) }}" style="margin:0">
+              <button class="btn btn-sm btn-green" type="submit">Devuelto</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+
+    {% if vencen_hoy %}
+    <div class="card">
+      <div class="card-header">⏰ Devuelven hoy</div>
+      <table>
+        <thead><tr><th>Alumno</th><th>Libro</th><th></th></tr></thead>
+        <tbody>
+        {% for p in vencen_hoy %}
+        <tr>
+          <td><strong>{{ p.alumno }}</strong></td>
+          <td>{{ p.titulo }} — Ej. #{{ p.numero }}</td>
+          <td>
+            <form method="post" action="{{ url_for('devolver', pid=p.id) }}" style="margin:0">
+              <button class="btn btn-sm btn-green" type="submit">Devuelto</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+
+    {% if not vencidos and not vencen_hoy %}
+    <div class="card">
+      <div class="card-header">Estado del día</div>
+      <div class="empty">✅ Todo en orden — sin vencimientos hoy</div>
+    </div>
+    {% endif %}
+  </div>
+
+  <div>
+    {% if por_vencer %}
+    <div class="card">
+      <div class="card-header">🔔 Por vencer (próximos 3 días)</div>
+      <table>
+        <thead><tr><th>Alumno</th><th>Libro</th><th>Devuelve</th></tr></thead>
+        <tbody>
+        {% for p in por_vencer %}
+        <tr>
+          <td><strong>{{ p.alumno }}</strong></td>
+          <td>{{ p.titulo }}</td>
+          <td><span class="badge badge-amber">{{ p.fin }}</span></td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+
+    <div class="card">
+      <div class="card-header">
+        <span>📋 Préstamos activos recientes</span>
+        <a href="{{ url_for('prestamo_nuevo') }}" class="btn btn-sm btn-primary">+ Nuevo</a>
+      </div>
+      {% if recientes %}
+      <table>
+        <thead><tr><th>Alumno</th><th>Libro / Ej.</th><th>Devuelve</th></tr></thead>
+        <tbody>
+        {% for p in recientes %}
+        <tr>
+          <td><strong>{{ p.alumno }}</strong><br><span style="font-size:11px;color:#888">{{ p.grado }}</span></td>
+          <td>{{ p.titulo }}<br><span style="font-size:11px;color:#888">Ejemplar #{{ p.numero }}</span></td>
+          <td style="font-size:12px;color:#888">{{ p.fin }}</td>
+        </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty">Sin préstamos activos</div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

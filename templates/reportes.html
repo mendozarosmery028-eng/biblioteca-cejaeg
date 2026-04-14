@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+  <div><h2>Reportes</h2><p>Estadísticas y resumen de la biblioteca</p></div>
+</div>
+
+<div class="two-col">
+  <div class="card">
+    <div class="card-header">📊 Libros más prestados</div>
+    {% if mas_prestados %}
+    <table>
+      <thead><tr><th>#</th><th>Título</th><th>Autor</th><th>Préstamos</th></tr></thead>
+      <tbody>
+      {% for r in mas_prestados %}
+      <tr>
+        <td style="color:#aaa;font-size:12px">{{ loop.index }}</td>
+        <td style="font-weight:500">{{ r.titulo }}</td>
+        <td style="color:#888;font-size:12px">{{ r.autor }}</td>
+        <td><span class="badge badge-indigo">{{ r.veces }}</span></td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty">Sin datos aún</div>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <div class="card-header">📚 Ejemplares por categoría</div>
+    {% if por_categoria %}
+    <table>
+      <thead><tr><th>Categoría</th><th>Total</th><th>Prestados</th><th>Disp.</th></tr></thead>
+      <tbody>
+      {% for r in por_categoria %}
+      <tr>
+        <td><span class="badge badge-blue">{{ r.categoria }}</span></td>
+        <td style="font-weight:500">{{ r.total }}</td>
+        <td>{% if r.prestados %}<span class="badge badge-indigo">{{ r.prestados }}</span>{% else %}—{% endif %}</td>
+        <td><span class="badge badge-green">{{ r.total - (r.prestados or 0) }}</span></td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty">Sin datos</div>
+    {% endif %}
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header">⛔ Alumnos con préstamos vencidos</div>
+  {% if alumnos_vencidos %}
+  <table>
+    <thead><tr><th>Alumno</th><th>Grado</th><th>Libro</th><th>Ej.</th><th>Venció</th><th>Días</th><th>Acción</th></tr></thead>
+    <tbody>
+    {% for p in alumnos_vencidos %}
+    <tr>
+      <td style="font-weight:500">{{ p.alumno }}</td>
+      <td style="color:#888;font-size:12px">{{ p.grado or '—' }}</td>
+      <td>{{ p.titulo }}</td>
+      <td>#{{ p.numero }}</td>
+      <td style="font-size:12px;color:#dc2626">{{ p.fin }}</td>
+      <td><span class="badge badge-red">{{ p.dias }} días</span></td>
+      <td>
+        <form method="post" action="{{ url_for('devolver', pid=p.id) }}" style="margin:0">
+          <button class="btn btn-sm btn-green" type="submit">Devuelto</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">✅ No hay préstamos vencidos</div>
+  {% endif %}
+</div>
+{% endblock %}

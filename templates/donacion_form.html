@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+  <div><h2>Registrar donación</h2><p>Los ejemplares se agregarán automáticamente al inventario</p></div>
+  <a href="{{ url_for('donaciones') }}" class="btn">← Volver</a>
+</div>
+
+<div class="form-card">
+  <form method="post">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nombre del donante *</label>
+        <input name="donante" required placeholder="Persona u organización" autofocus>
+      </div>
+      <div class="form-group">
+        <label>Cantidad de ejemplares *</label>
+        <input name="cantidad" type="number" value="1" min="1" max="200" required>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>¿Es un libro que ya existe en el inventario?</label>
+      <select name="modo" id="sel-modo" onchange="toggleModo(this.value)">
+        <option value="nuevo">No, es un libro nuevo</option>
+        <option value="existente">Sí, ya está registrado</option>
+      </select>
+    </div>
+
+    <div id="bloque-nuevo">
+      <div class="form-row">
+        <div class="form-group">
+          <label>Título del libro *</label>
+          <input name="titulo" placeholder="Título del libro">
+        </div>
+        <div class="form-group">
+          <label>Autor</label>
+          <input name="autor" placeholder="Autor">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label>Categoría</label>
+          <select name="categoria">
+            <option value="">Sin categoría</option>
+            <option>Ciencias</option><option>Literatura</option><option>Historia</option>
+            <option>Matemáticas</option><option>Arte</option><option>Referencia</option>
+            <option>Idiomas</option><option>Tecnología</option><option>Otro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>ISBN</label>
+          <input name="isbn" placeholder="Opcional">
+        </div>
+      </div>
+    </div>
+
+    <div id="bloque-existente" style="display:none">
+      <div class="form-group">
+        <label>Selecciona el libro existente *</label>
+        <select name="titulo_id">
+          <option value="">— Selecciona —</option>
+          {% for t in titulos %}
+          <option value="{{ t.id }}">{{ t.titulo }} — {{ t.autor }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label>Fecha de donación</label>
+        <input name="fecha" type="date" value="{{ today }}">
+      </div>
+      <div class="form-group">
+        <label>Nota</label>
+        <input name="nota" placeholder="Estado del libro, condición, etc.">
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Registrar donación</button>
+      <a href="{{ url_for('donaciones') }}" class="btn">Cancelar</a>
+    </div>
+  </form>
+</div>
+
+<script>
+document.querySelector('[name=fecha]').value = new Date().toISOString().split('T')[0];
+function toggleModo(v){
+  document.getElementById('bloque-nuevo').style.display = v==='nuevo' ? '' : 'none';
+  document.getElementById('bloque-existente').style.display = v==='existente' ? '' : 'none';
+}
+</script>
+{% endblock %}

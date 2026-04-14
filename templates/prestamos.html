@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+  <div><h2>Préstamos</h2><p>Gestión de préstamos activos, devueltos y vencidos</p></div>
+  <a href="{{ url_for('prestamo_nuevo') }}" class="btn btn-primary">+ Nuevo préstamo</a>
+</div>
+
+<div class="search-bar">
+  <form method="get" style="display:contents">
+    <input name="q" value="{{ q }}" placeholder="Buscar por alumno, grado o libro...">
+    <select name="estado" onchange="this.form.submit()">
+      <option value="">Todos los préstamos</option>
+      <option value="activo" {% if estado=='activo' %}selected{% endif %}>Activos</option>
+      <option value="vencido" {% if estado=='vencido' %}selected{% endif %}>Vencidos</option>
+      <option value="devuelto" {% if estado=='devuelto' %}selected{% endif %}>Devueltos</option>
+    </select>
+    <button type="submit" class="btn">Buscar</button>
+    {% if q or estado %}<a href="{{ url_for('prestamos') }}" class="btn">✕ Limpiar</a>{% endif %}
+  </form>
+</div>
+
+{% if lista %}
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>Alumno</th>
+        <th>Grado</th>
+        <th>Libro / Ejemplar</th>
+        <th>Prestado</th>
+        <th>Devuelve</th>
+        <th>Estado</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for p in lista %}
+    <tr>
+      <td style="font-weight:500">{{ p.alumno }}</td>
+      <td style="color:#888;font-size:12px">{{ p.grado or '—' }}</td>
+      <td>
+        {{ p.titulo }}<br>
+        <span style="font-size:11px;color:#aaa">Ejemplar #{{ p.numero }}</span>
+      </td>
+      <td style="font-size:12px;color:#888">{{ p.inicio }}</td>
+      <td style="font-size:12px;color:#888">{{ p.fin }}</td>
+      <td>
+        {% if p.estado_calc == 'devuelto' %}
+          <span class="badge badge-gray">Devuelto</span>
+        {% elif p.estado_calc == 'vencido' %}
+          <span class="badge badge-red">Vencido</span>
+        {% elif p.estado_calc == 'vence_hoy' %}
+          <span class="badge badge-amber">Vence hoy</span>
+        {% else %}
+          <span class="badge badge-green">Activo</span>
+        {% endif %}
+      </td>
+      <td>
+        {% if p.estado_calc != 'devuelto' %}
+        <form method="post" action="{{ url_for('devolver', pid=p.id) }}" style="margin:0">
+          <button class="btn btn-sm btn-green" type="submit">Marcar devuelto</button>
+        </form>
+        {% else %}
+        <span style="font-size:12px;color:#ccc">{{ p.devuelto }}</span>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="empty">No hay préstamos que mostrar.</div>
+{% endif %}
+{% endblock %}

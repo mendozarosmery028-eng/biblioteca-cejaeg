@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+  <div><h2>Donaciones</h2><p>Libros recibidos por donación</p></div>
+  <a href="{{ url_for('donacion_nueva') }}" class="btn btn-primary">+ Registrar donación</a>
+</div>
+
+{% if lista %}
+<div class="card">
+  <table>
+    <thead>
+      <tr><th>Donante</th><th>Libro</th><th>Cantidad</th><th>Fecha</th><th>Nota</th></tr>
+    </thead>
+    <tbody>
+    {% for d in lista %}
+    <tr>
+      <td style="font-weight:500">{{ d.donante }}</td>
+      <td>{{ d.titulo or '—' }}<br>{% if d.autor %}<span style="font-size:11px;color:#aaa">{{ d.autor }}</span>{% endif %}</td>
+      <td><span class="badge badge-indigo">{{ d.cantidad }} ej.</span></td>
+      <td style="font-size:12px;color:#888">{{ d.fecha }}</td>
+      <td style="font-size:12px;color:#888">{{ d.nota or '—' }}</td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="empty">No hay donaciones registradas aún.</div>
+{% endif %}
+{% endblock %}

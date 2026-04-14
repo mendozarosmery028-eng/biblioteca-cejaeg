@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+  <div><h2>Libros</h2><p>Inventario de títulos y ejemplares</p></div>
+  <a href="{{ url_for('libro_nuevo') }}" class="btn btn-primary">+ Agregar libro</a>
+</div>
+
+<div class="search-bar">
+  <form method="get" style="display:contents">
+    <input name="q" value="{{ q }}" placeholder="Buscar por título, autor o ISBN...">
+    <select name="cat" onchange="this.form.submit()">
+      <option value="">Todas las categorías</option>
+      {% for c in categorias %}
+      <option value="{{ c }}" {% if c==cat %}selected{% endif %}>{{ c }}</option>
+      {% endfor %}
+    </select>
+    <button type="submit" class="btn">Buscar</button>
+    {% if q or cat %}<a href="{{ url_for('libros') }}" class="btn">✕ Limpiar</a>{% endif %}
+  </form>
+</div>
+
+{% if titulos %}
+<div class="card">
+  <table>
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Autor</th>
+        <th>Categoría</th>
+        <th>Ejemplares</th>
+        <th>Disponibles</th>
+        <th>Prestados</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for t in titulos %}
+    <tr>
+      <td>
+        <a href="{{ url_for('libro_detalle', tid=t.id) }}" style="font-weight:500;color:#4f46e5">{{ t.titulo }}</a>
+        {% if t.isbn %}<br><span style="font-size:11px;color:#aaa">ISBN {{ t.isbn }}</span>{% endif %}
+      </td>
+      <td style="color:#555">{{ t.autor }}</td>
+      <td>{% if t.categoria %}<span class="badge badge-blue">{{ t.categoria }}</span>{% else %}—{% endif %}</td>
+      <td style="font-weight:500;text-align:center">{{ t.total_ejemplares or 0 }}</td>
+      <td style="text-align:center">
+        {% if (t.disponibles or 0) > 0 %}
+          <span class="badge badge-green">{{ t.disponibles }}</span>
+        {% else %}
+          <span class="badge badge-red">0</span>
+        {% endif %}
+      </td>
+      <td style="text-align:center">
+        {% if (t.prestados or 0) > 0 %}
+          <span class="badge badge-indigo">{{ t.prestados }}</span>
+        {% else %}
+          <span style="color:#ccc">—</span>
+        {% endif %}
+      </td>
+      <td>
+        <a href="{{ url_for('libro_detalle', tid=t.id) }}" class="btn btn-sm">Ver</a>
+      </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="empty">No se encontraron libros. <a href="{{ url_for('libro_nuevo') }}" style="color:#4f46e5">Agrega el primero.</a></div>
+{% endif %}
+{% endblock %}

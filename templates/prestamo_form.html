@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="page-header">
+  <div><h2>Nuevo préstamo</h2><p>Registra el préstamo de un ejemplar específico</p></div>
+  <a href="{{ url_for('prestamos') }}" class="btn">← Volver</a>
+</div>
+
+<div class="form-card">
+  <form method="post">
+    <div class="form-row">
+      <div class="form-group">
+        <label>Nombre del alumno *</label>
+        <input name="alumno" required placeholder="Nombre completo" autofocus>
+      </div>
+      <div class="form-group">
+        <label>Grado / Sección</label>
+        <input name="grado" placeholder="Ej. 10° A">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Libro *</label>
+      <select name="titulo_id" id="sel-titulo" required onchange="cargarEjemplares(this.value)">
+        <option value="">— Selecciona un libro —</option>
+        {% for t in titulos %}
+        <option value="{{ t.id }}">{{ t.titulo }} — {{ t.autor }} ({{ t.disponibles }} disponible{{ 's' if t.disponibles != 1 else '' }})</option>
+        {% endfor %}
+      </select>
+      {% if not titulos %}
+      <p style="font-size:12px;color:#dc2626;margin-top:4px">No hay libros con ejemplares disponibles. <a href="{{ url_for('libro_nuevo') }}" style="color:#4f46e5">Agrega un libro primero.</a></p>
+      {% endif %}
+    </div>
+
+    <div class="form-group">
+      <label>Ejemplar específico *</label>
+      <select name="ejemplar_id" id="sel-ejemplar" required>
+        <option value="">— Primero selecciona un libro —</option>
+      </select>
+      <p style="font-size:11px;color:#888;margin-top:4px">Se mostrará el número de cada ejemplar disponible</p>
+    </div>
+
+    <div class="form-group">
+      <label>Duración del préstamo * <span style="color:#888;font-weight:normal">(máximo 3 semanas)</span></label>
+      <div style="display:flex;align-items:center;gap:12px">
+        <input type="range" name="semanas" id="range-semanas" min="1" max="3" value="1" style="flex:1" oninput="updateSemanas(this.value)">
+        <span id="semanas-label" style="font-size:15px;font-weight:600;min-width:80px;color:#4f46e5">1 semana</span>
+      </div>
+      <p id="fecha-devolucion-preview" style="font-size:12px;color:#888;margin-top:4px"></p>
+    </div>
+
+    <div class="form-group">
+      <label>Nota (opcional)</label>
+      <input name="nota" placeholder="Estado del libro, observaciones...">
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary" {% if not titulos %}disabled{% endif %}>Registrar préstamo</button>
+      <a href="{{ url_for('prestamos') }}" class="btn">Cancelar</a>
+    </div>
+  </form>
+</div>
+
+<script>
+function updateSemanas(v){
+  const lbl = document.getElementById('semanas-label');
+  lbl.textContent = v + (v=='1' ? ' semana' : ' semanas');
+  const d = new Date();
+  d.setDate(d.getDate() + parseInt(v)*7);
+  document.getElementById('fecha-devolucion-preview').textContent =
+    'Fecha de devolución: ' + d.toLocaleDateString('es', {weekday:'long',year:'numeric',month:'long',day:'numeric'});
+}
+updateSemanas(1);
+
+async function cargarEjemplares(titulo_id){
+  const sel = document.getElementById('sel-ejemplar');
+  sel.innerHTML = '<option value="">Cargando...</option>';
+  if(!titulo_id){ sel.innerHTML = '<option value="">— Primero selecciona un libro —</option>'; return; }
+  const res = await fetch('/prestamos/ejemplares/' + titulo_id);
+  const data = await res.json();
+  if(data.length === 0){
+    sel.innerHTML = '<option value="">Sin ejemplares disponibles</option>';
+  } else {
+    sel.innerHTML = data.map(e => `<option value="${e.id}">Ejemplar #${e.numero}</option>`).join('');
+  }
+}
+</script>
+{% endblock %}
