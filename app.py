@@ -580,4 +580,4 @@ if __name__ == '__main__':
     print("\n  Biblioteca escolar iniciada")
     print("  Abre tu navegador en: biblioteca-cejaeg-production-c612.up.railway.app")
     print("  Usuario: admin  |  Contraseña: admin123\n")
-    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 8080)))
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
